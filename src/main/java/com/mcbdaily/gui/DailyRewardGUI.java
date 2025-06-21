@@ -1,6 +1,7 @@
 package com.mcbdaily.gui;
 
 import com.mcbdaily.MCBDaily;
+import com.mcbdaily.utils.BroadcastUtil;
 import com.mcbdaily.utils.MessageUtil;
 import com.mcbdaily.utils.TimeFormatter;
 import org.bukkit.Bukkit;
@@ -227,9 +228,11 @@ public class DailyRewardGUI implements Listener {
         // Set claim timestamp
         plugin.getPlayerDataManager().setClaimed(player.getUniqueId());
         
-        // Close inventory and send success message
+        // Close inventory
         player.closeInventory();
-        MessageUtil.sendMessage(player, "&a&lDaily reward claimed successfully!");
+        
+        // Send claim message and broadcast
+        BroadcastUtil.handleClaimMessages(plugin, player);
         
         // Optional: Play sound effect
         player.playSound(player.getLocation(), org.bukkit.Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);

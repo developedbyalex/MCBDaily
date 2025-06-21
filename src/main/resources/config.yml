@@ -33,6 +33,35 @@ gui:
       - "<yellow>Rewards:</yellow>"
       - "%rewards%"
 
+# Claim Messages Configuration
+messages:
+  # Message sent to the player when they claim their reward
+  # Supports both legacy (&) and MiniMessage format
+  claim-success: "<gradient:#00ff00:#55ff55><bold>Daily reward claimed successfully!</bold></gradient>"
+  
+  # Broadcast settings
+  broadcast:
+    # Enable/disable server-wide broadcast when someone claims
+    enabled: true
+    
+    # Send broadcast to console as well
+    console-log: true
+    
+    # Exclude the claiming player from receiving the broadcast
+    exclude-claimer: false
+    
+    # Broadcast message (supports %player% placeholder)
+    # Use both legacy and MiniMessage formatting
+    message: "<gradient:#ffaa00:#ff6600><bold>%player%</bold></gradient> <yellow>has claimed their daily reward!</yellow>"
+    
+    # Alternative broadcast messages (random selection)
+    # Leave empty to use only the main message
+    random-messages:
+      - "<rainbow><bold>%player%</bold></rainbow> <green>just got their daily rewards!</green>"
+      - "<gradient:#ff0000:#ffaa00><bold>%player%</bold></gradient> <yellow>claimed amazing daily rewards!</yellow>"
+      - "<gradient:#00ffff:#0066ff><bold>%player%</bold></gradient> <aqua>received their daily bonus!</aqua>"
+      - "<gradient:#9932cc:#ff1493><bold>%player%</bold></gradient> <light_purple>earned their daily treasures!</light_purple>"
+
 # List of commands to execute when a player claims their daily reward
 # Use %player% as a placeholder for the player's name
 rewards:
@@ -40,7 +69,6 @@ rewards:
   - "give %player% emerald 5"
   - "give %player% gold_ingot 10"
   - "eco give %player% 1000"
-  - "msg %player% &aYou have received your daily reward!"
 
 # Debug mode (logs additional information)
 debug: false 

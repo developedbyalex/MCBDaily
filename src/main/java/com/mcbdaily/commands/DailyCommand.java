@@ -2,6 +2,7 @@ package com.mcbdaily.commands;
 
 import com.mcbdaily.MCBDaily;
 import com.mcbdaily.gui.DailyRewardGUI;
+import com.mcbdaily.utils.BroadcastUtil;
 import com.mcbdaily.utils.MessageUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -54,6 +55,16 @@ public class DailyCommand implements CommandExecutor {
                     }
                 } else {
                     MessageUtil.sendMessage(player, "&cYou don't have permission to reset cooldowns!");
+                }
+                return true;
+            }
+            
+            if (args[0].equalsIgnoreCase("testbroadcast")) {
+                if (player.hasPermission("mcbdaily.admin")) {
+                    BroadcastUtil.broadcastClaim(plugin, player);
+                    MessageUtil.sendMessage(player, "&aTest broadcast sent!");
+                } else {
+                    MessageUtil.sendMessage(player, "&cYou don't have permission to test broadcasts!");
                 }
                 return true;
             }

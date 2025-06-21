@@ -14,6 +14,9 @@ A simple yet powerful daily rewards plugin for Minecraft servers with GUI interf
 - 🌈 **MiniMessage Support** - Modern text formatting with gradients, rainbows, and hover effects
 - 🔄 **Auto-Refresh GUI** - Live countdown updates every few seconds
 - 🎨 **Dual Format Support** - Use both legacy color codes and MiniMessage syntax
+- 📢 **Configurable Broadcasts** - Server-wide announcements when players claim rewards
+- 🎲 **Random Messages** - Multiple broadcast messages with random selection
+- ✉️ **Custom Claim Messages** - Personalized success messages for players
 
 ## Installation
 
@@ -30,6 +33,7 @@ A simple yet powerful daily rewards plugin for Minecraft servers with GUI interf
 | `/daily` | Open daily rewards GUI | `mcbdaily.claim` | `/rewards`, `/dailyreward` |
 | `/daily reload` | Reload configuration | `mcbdaily.admin` | - |
 | `/daily reset <player>` | Reset player's cooldown | `mcbdaily.admin` | - |
+| `/daily testbroadcast` | Test broadcast messages | `mcbdaily.admin` | - |
 
 ## Permissions
 
@@ -131,6 +135,38 @@ lore:
 - **MiniMessage Support**: Modern text formatting with gradients, rainbow, hover effects
 - **Legacy Support**: Traditional `&` color codes still work
 - **Auto-detection**: Automatically detects format type and applies appropriate formatting
+
+## Broadcast System
+
+The plugin features a comprehensive broadcast system for claim announcements:
+
+### Configuration Options
+```yaml
+messages:
+  claim-success: "<gradient:#00ff00:#55ff55><bold>Daily reward claimed successfully!</bold></gradient>"
+  
+  broadcast:
+    enabled: true                    # Enable/disable broadcasts
+    console-log: true               # Log broadcasts to console
+    exclude-claimer: false          # Don't send broadcast to the claiming player
+    
+    # Main broadcast message
+    message: "<gradient:#ffaa00:#ff6600><bold>%player%</bold></gradient> <yellow>has claimed their daily reward!</yellow>"
+    
+    # Random alternative messages (optional)
+    random-messages:
+      - "<rainbow><bold>%player%</bold></rainbow> <green>just got their daily rewards!</green>"
+      - "<gradient:#ff0000:#ffaa00><bold>%player%</bold></gradient> <yellow>claimed amazing daily rewards!</yellow>"
+      - "<gradient:#00ffff:#0066ff><bold>%player%</bold></gradient> <aqua>received their daily bonus!</aqua>"
+```
+
+### Features
+- **Toggle broadcasts** on/off via configuration
+- **Random message selection** from multiple configured messages
+- **Player name placeholder** (`%player%`) support
+- **Console logging** of broadcast messages
+- **Exclude claimer option** to prevent spam for the claiming player
+- **Admin test command** to preview broadcasts
 
 ## PlaceholderAPI Support
 
