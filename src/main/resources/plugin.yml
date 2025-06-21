@@ -1,7 +1,7 @@
 name: MCBDaily
 version: '${project.version}'
 main: com.mcbdaily.MCBDaily
-api-version: '1.16'
+api-version: '1.21'
 description: Daily reward plugin for Minecraft
 authors: [YourName]
 website: https://github.com/yourusername/MCBDaily

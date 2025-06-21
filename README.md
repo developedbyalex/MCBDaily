@@ -79,7 +79,7 @@ If PlaceholderAPI is installed, the following placeholders are available:
 ## Requirements
 
 - Java 17 or higher
-- Spigot/Paper 1.16+ (tested on 1.20.1)
+- Spigot/Paper 1.21+ (tested on 1.21.4)
 - (Optional) PlaceholderAPI for placeholder support
 
 ## Support
