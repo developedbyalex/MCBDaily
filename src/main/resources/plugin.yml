@@ -1,0 +1,28 @@
+name: MCBDaily
+version: '${project.version}'
+main: com.mcbdaily.MCBDaily
+api-version: '1.16'
+description: Daily reward plugin for Minecraft
+authors: [YourName]
+website: https://github.com/yourusername/MCBDaily
+
+depend: []
+softdepend: [PlaceholderAPI]
+
+commands:
+  daily:
+    description: Open the daily rewards GUI
+    usage: /<command>
+    aliases: [rewards, dailyreward]
+    permission: mcbdaily.claim
+
+permissions:
+  mcbdaily.claim:
+    description: Allows players to claim daily rewards
+    default: true
+  mcbdaily.bypass:
+    description: Bypass the daily cooldown
+    default: op
+  mcbdaily.admin:
+    description: Access to admin commands
+    default: op 

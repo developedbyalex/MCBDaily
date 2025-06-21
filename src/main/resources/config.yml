@@ -1,0 +1,17 @@
+# MCBDaily Plugin Configuration
+# ===========================
+
+# Cooldown time in hours (default: 24 hours)
+cooldown-hours: 24
+
+# List of commands to execute when a player claims their daily reward
+# Use %player% as a placeholder for the player's name
+rewards:
+  - "give %player% diamond 1"
+  - "give %player% emerald 5"
+  - "give %player% gold_ingot 10"
+  - "eco give %player% 1000"
+  - "msg %player% &aYou have received your daily reward!"
+
+# Debug mode (logs additional information)
+debug: false 
