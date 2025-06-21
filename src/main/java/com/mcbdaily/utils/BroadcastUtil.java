@@ -43,9 +43,9 @@ public class BroadcastUtil {
                 MessageUtil.sendMessage(onlinePlayer, broadcastMessage);
             }
             
-            // Log to console if enabled
+            // Log to console if enabled (show original format, not converted)
             if (plugin.getConfig().getBoolean("messages.broadcast.console-log", true)) {
-                plugin.getLogger().info("Daily claim broadcast: " + MessageUtil.format(broadcastMessage));
+                plugin.getLogger().info("Daily claim broadcast: " + broadcastMessage);
             }
         }
     }
