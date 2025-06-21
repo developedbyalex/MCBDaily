@@ -41,6 +41,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: write
     
     steps:
     - name: Checkout code
@@ -94,6 +96,6 @@ jobs:
           - `%mcbdaily_countdown%` - Time until next claim
           - `%mcbdaily_can_claim%` - true/false if player can claim
           - `%mcbdaily_time_left_millis%` - Time left in milliseconds
-        files: target/MCBDaily-${{ steps.get_version.outputs.VERSION }}.jar
+        files: target/MCBDaily-*.jar
         draft: false
         prerelease: false 
