@@ -9,29 +9,27 @@ cooldown-hours: 24
 # MiniMessage examples: <gradient:#ff0000:#00ff00>text</gradient>, <rainbow>text</rainbow>
 gui:
   # Title of the GUI
-  title: "<gradient:#ffaa00:#ff6600>Daily Rewards</gradient>"
+  title: "<b><gradient:#FF899F:#7AEC6A>DAILY </gradient><gradient:#7AEC6A:#6CC1FF>REWARD</gradient></b>"
   
   # Auto-refresh interval in seconds (0 to disable)
-  auto-refresh-seconds: 5
+  auto-refresh-seconds: 1
   
   # Claimable item configuration (lime concrete)
   claimable:
-    display-name: "<gradient:#00ff00:#55ff55><bold>Daily Reward</bold></gradient>"
+    display-name: "<b><#7AEC6A>Daily Reward</#7AEC6A></b>"
     lore:
+      - ""
       - "&7Click to claim your daily reward!"
       - ""
-      - "<yellow>Rewards:</yellow>"
-      - "%rewards%"
   
   # Cooldown item configuration (red concrete)  
   cooldown:
-    display-name: "<gradient:#ff0000:#ff5555><bold>Daily Reward</bold></gradient>"
+    display-name: "<b><#da2552>Daily Reward</#da2552></b>"
     lore:
-      - "&7You can claim again in:"
-      - "<red><bold>%countdown%</bold></red>"
       - ""
-      - "<yellow>Rewards:</yellow>"
-      - "%rewards%"
+      - "&7You can claim again in:"
+      - "<#da2552><bold>%countdown%</bold></#da2552>"
+      - ""
 
 # Claim Messages Configuration
 messages:
@@ -52,15 +50,11 @@ messages:
     
     # Broadcast message (supports %player% placeholder)
     # Use both legacy and MiniMessage formatting
-    message: "<gradient:#ffaa00:#ff6600><bold>%player%</bold></gradient> <yellow>has claimed their daily reward!</yellow>"
+    message: "<b><#fec76f>DAILY REWARD</b> <dark_gray>» <b><#fec76f>%player%</b> <gray>has claimed their daily reward. Claim yours with <b><#fec76f>/daily"
     
     # Alternative broadcast messages (random selection)
     # Leave empty to use only the main message
-    random-messages:
-      - "<rainbow><bold>%player%</bold></rainbow> <green>just got their daily rewards!</green>"
-      - "<gradient:#ff0000:#ffaa00><bold>%player%</bold></gradient> <yellow>claimed amazing daily rewards!</yellow>"
-      - "<gradient:#00ffff:#0066ff><bold>%player%</bold></gradient> <aqua>received their daily bonus!</aqua>"
-      - "<gradient:#9932cc:#ff1493><bold>%player%</bold></gradient> <light_purple>earned their daily treasures!</light_purple>"
+    random-messages: []
 
 # List of commands to execute when a player claims their daily reward
 # Use %player% as a placeholder for the player's name

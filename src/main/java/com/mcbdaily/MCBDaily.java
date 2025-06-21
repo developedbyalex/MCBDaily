@@ -18,8 +18,10 @@ public class MCBDaily extends JavaPlugin {
         // Initialize data manager
         playerDataManager = new PlayerDataManager(this);
         
-        // Register command
-        getCommand("daily").setExecutor(new DailyCommand(this));
+        // Register command and tab completer
+        DailyCommand dailyCommand = new DailyCommand(this);
+        getCommand("daily").setExecutor(dailyCommand);
+        getCommand("daily").setTabCompleter(dailyCommand);
         
         // Register PlaceholderAPI expansion if available
         if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {

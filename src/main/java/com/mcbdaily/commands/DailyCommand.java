@@ -7,9 +7,15 @@ import com.mcbdaily.utils.MessageUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-public class DailyCommand implements CommandExecutor {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class DailyCommand implements CommandExecutor, TabCompleter {
     
     private final MCBDaily plugin;
     
@@ -75,5 +81,48 @@ public class DailyCommand implements CommandExecutor {
         gui.open();
         
         return true;
+    }
+    
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        List<String> completions = new ArrayList<>();
+        
+        if (!(sender instanceof Player)) {
+            return completions;
+        }
+        
+        Player player = (Player) sender;
+        
+        // Check if player has basic permission
+        if (!player.hasPermission("mcbdaily.claim")) {
+            return completions;
+        }
+        
+        if (args.length == 1) {
+            // First argument completions
+            List<String> subcommands = new ArrayList<>();
+            
+            // Add admin commands if player has permission
+            if (player.hasPermission("mcbdaily.admin")) {
+                subcommands.addAll(Arrays.asList("reload", "reset", "testbroadcast"));
+            }
+            
+            // Filter based on what the player has typed so far
+            String input = args[0].toLowerCase();
+            completions = subcommands.stream()
+                    .filter(cmd -> cmd.toLowerCase().startsWith(input))
+                    .collect(Collectors.toList());
+        } else if (args.length == 2 && args[0].equalsIgnoreCase("reset")) {
+            // Second argument for reset command - suggest online player names
+            if (player.hasPermission("mcbdaily.admin")) {
+                String input = args[1].toLowerCase();
+                completions = plugin.getServer().getOnlinePlayers().stream()
+                        .map(Player::getName)
+                        .filter(name -> name.toLowerCase().startsWith(input))
+                        .collect(Collectors.toList());
+            }
+        }
+        
+        return completions;
     }
 } 
