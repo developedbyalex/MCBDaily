@@ -11,6 +11,9 @@ A simple yet powerful daily rewards plugin for Minecraft servers with GUI interf
 - 🔒 **Permission System** - Fine-grained permission controls
 - 👑 **Admin Commands** - Reload config and reset player cooldowns
 - 💾 **Data Persistence** - Player data saved across server restarts
+- 🌈 **MiniMessage Support** - Modern text formatting with gradients, rainbows, and hover effects
+- 🔄 **Auto-Refresh GUI** - Live countdown updates every few seconds
+- 🎨 **Dual Format Support** - Use both legacy color codes and MiniMessage syntax
 
 ## Installation
 
@@ -94,11 +97,40 @@ You can use these placeholders in your GUI lore:
 - `%rewards%` - Shows a preview of the configured rewards
 - `%player%` - Player's name (in reward commands)
 
+### Text Formatting
+
+The plugin supports both **legacy color codes** and **MiniMessage** format:
+
+**Legacy Color Codes:**
+```yaml
+display-name: "&a&lDaily Reward"
+lore:
+  - "&7Click to claim!"
+  - "&cTime left: %countdown%"
+```
+
+**MiniMessage Format:**
+```yaml
+display-name: "<gradient:#00ff00:#55ff55><bold>Daily Reward</bold></gradient>"
+lore:
+  - "<gray>Click to claim!</gray>"
+  - "<red><bold>Time left: %countdown%</bold></red>"
+  - "<rainbow>Amazing rewards await!</rainbow>"
+```
+
+**MiniMessage Examples:**
+- `<gradient:#ff0000:#00ff00>Rainbow Gradient</gradient>`
+- `<rainbow>Rainbow Text</rainbow>`
+- `<hover:show_text:'Hover message'>Hover Text</hover>`
+- `<bold><italic><color:#ff5555>Styled Text</color></italic></bold>`
+
 ### GUI Features
 
 - **Auto-refresh**: The countdown updates automatically every 5 seconds (configurable)
 - **Custom lore**: Fully customizable item names and descriptions
-- **Color codes**: Use `&` color codes in all text fields
+- **MiniMessage Support**: Modern text formatting with gradients, rainbow, hover effects
+- **Legacy Support**: Traditional `&` color codes still work
+- **Auto-detection**: Automatically detects format type and applies appropriate formatting
 
 ## PlaceholderAPI Support
 

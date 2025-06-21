@@ -1,6 +1,7 @@
 package com.mcbdaily.gui;
 
 import com.mcbdaily.MCBDaily;
+import com.mcbdaily.utils.MessageUtil;
 import com.mcbdaily.utils.TimeFormatter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -29,7 +30,7 @@ public class DailyRewardGUI implements Listener {
         this.plugin = plugin;
         this.player = player;
         
-        String title = ChatColor.translateAlternateColorCodes('&', 
+        String title = MessageUtil.format(
             plugin.getConfig().getString("gui.title", "&6Daily Rewards"));
         this.inventory = Bukkit.createInventory(null, 27, title);
         
@@ -72,7 +73,7 @@ public class DailyRewardGUI implements Listener {
         
         // Get configurable display name
         String displayName = plugin.getConfig().getString("gui.claimable.display-name", "&a&lDaily Reward");
-        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', displayName));
+        meta.setDisplayName(MessageUtil.format(displayName));
         
         // Get configurable lore
         List<String> configLore = plugin.getConfig().getStringList("gui.claimable.lore");
@@ -82,7 +83,7 @@ public class DailyRewardGUI implements Listener {
             if (line.contains("%rewards%")) {
                 lore.add(getRewardList());
             } else {
-                lore.add(ChatColor.translateAlternateColorCodes('&', line));
+                lore.add(MessageUtil.format(line));
             }
         }
         
@@ -97,7 +98,7 @@ public class DailyRewardGUI implements Listener {
         
         // Get configurable display name
         String displayName = plugin.getConfig().getString("gui.cooldown.display-name", "&c&lDaily Reward");
-        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', displayName));
+        meta.setDisplayName(MessageUtil.format(displayName));
         
         // Get configurable lore
         List<String> configLore = plugin.getConfig().getStringList("gui.cooldown.lore");
@@ -108,11 +109,11 @@ public class DailyRewardGUI implements Listener {
         
         for (String line : configLore) {
             if (line.contains("%countdown%")) {
-                lore.add(ChatColor.translateAlternateColorCodes('&', line.replace("%countdown%", countdown)));
+                lore.add(MessageUtil.format(line.replace("%countdown%", countdown)));
             } else if (line.contains("%rewards%")) {
                 lore.add(getRewardList());
             } else {
-                lore.add(ChatColor.translateAlternateColorCodes('&', line));
+                lore.add(MessageUtil.format(line));
             }
         }
         
@@ -203,7 +204,7 @@ public class DailyRewardGUI implements Listener {
             if (plugin.getPlayerDataManager().canClaim(player.getUniqueId())) {
                 claimReward();
             } else {
-                player.sendMessage(ChatColor.RED + "You cannot claim your daily reward yet!");
+                MessageUtil.sendMessage(player, "&cYou cannot claim your daily reward yet!");
             }
         }
     }
@@ -228,7 +229,7 @@ public class DailyRewardGUI implements Listener {
         
         // Close inventory and send success message
         player.closeInventory();
-        player.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "Daily reward claimed successfully!");
+        MessageUtil.sendMessage(player, "&a&lDaily reward claimed successfully!");
         
         // Optional: Play sound effect
         player.playSound(player.getLocation(), org.bukkit.Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);

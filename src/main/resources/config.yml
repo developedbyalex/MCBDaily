@@ -5,30 +5,32 @@
 cooldown-hours: 24
 
 # GUI Configuration
+# Supports both legacy color codes (&a, &c, etc.) and MiniMessage format
+# MiniMessage examples: <gradient:#ff0000:#00ff00>text</gradient>, <rainbow>text</rainbow>
 gui:
   # Title of the GUI
-  title: "&6Daily Rewards"
+  title: "<gradient:#ffaa00:#ff6600>Daily Rewards</gradient>"
   
   # Auto-refresh interval in seconds (0 to disable)
   auto-refresh-seconds: 5
   
   # Claimable item configuration (lime concrete)
   claimable:
-    display-name: "&a&lDaily Reward"
+    display-name: "<gradient:#00ff00:#55ff55><bold>Daily Reward</bold></gradient>"
     lore:
       - "&7Click to claim your daily reward!"
       - ""
-      - "&eRewards:"
+      - "<yellow>Rewards:</yellow>"
       - "%rewards%"
   
   # Cooldown item configuration (red concrete)  
   cooldown:
-    display-name: "&c&lDaily Reward"
+    display-name: "<gradient:#ff0000:#ff5555><bold>Daily Reward</bold></gradient>"
     lore:
       - "&7You can claim again in:"
-      - "&c%countdown%"
+      - "<red><bold>%countdown%</bold></red>"
       - ""
-      - "&eRewards:"
+      - "<yellow>Rewards:</yellow>"
       - "%rewards%"
 
 # List of commands to execute when a player claims their daily reward

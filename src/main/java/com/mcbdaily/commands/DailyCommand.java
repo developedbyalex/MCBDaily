@@ -2,6 +2,7 @@ package com.mcbdaily.commands;
 
 import com.mcbdaily.MCBDaily;
 import com.mcbdaily.gui.DailyRewardGUI;
+import com.mcbdaily.utils.MessageUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -18,7 +19,7 @@ public class DailyCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("§cThis command can only be used by players!");
+            sender.sendMessage(MessageUtil.format("&cThis command can only be used by players!"));
             return true;
         }
         
@@ -26,7 +27,7 @@ public class DailyCommand implements CommandExecutor {
         
         // Check permission
         if (!player.hasPermission("mcbdaily.claim")) {
-            player.sendMessage("§cYou don't have permission to use this command!");
+            MessageUtil.sendMessage(player, "&cYou don't have permission to use this command!");
             return true;
         }
         
@@ -35,9 +36,9 @@ public class DailyCommand implements CommandExecutor {
             if (args[0].equalsIgnoreCase("reload")) {
                 if (player.hasPermission("mcbdaily.admin")) {
                     plugin.reloadPluginConfig();
-                    player.sendMessage("§aConfiguration reloaded successfully!");
+                    MessageUtil.sendMessage(player, "&aConfiguration reloaded successfully!");
                 } else {
-                    player.sendMessage("§cYou don't have permission to reload the configuration!");
+                    MessageUtil.sendMessage(player, "&cYou don't have permission to reload the configuration!");
                 }
                 return true;
             }
@@ -47,12 +48,12 @@ public class DailyCommand implements CommandExecutor {
                     Player targetPlayer = plugin.getServer().getPlayer(args[1]);
                     if (targetPlayer != null) {
                         plugin.getPlayerDataManager().resetCooldown(targetPlayer.getUniqueId());
-                        player.sendMessage("§aReset daily cooldown for " + targetPlayer.getName());
+                        MessageUtil.sendMessage(player, "&aReset daily cooldown for " + targetPlayer.getName());
                     } else {
-                        player.sendMessage("§cPlayer not found!");
+                        MessageUtil.sendMessage(player, "&cPlayer not found!");
                     }
                 } else {
-                    player.sendMessage("§cYou don't have permission to reset cooldowns!");
+                    MessageUtil.sendMessage(player, "&cYou don't have permission to reset cooldowns!");
                 }
                 return true;
             }
