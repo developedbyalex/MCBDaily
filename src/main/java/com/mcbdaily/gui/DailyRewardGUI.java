@@ -3,16 +3,19 @@ package com.mcbdaily.gui;
 import com.mcbdaily.MCBDaily;
 import com.mcbdaily.utils.TimeFormatter;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitTask;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DailyRewardGUI implements Listener {
@@ -20,16 +23,21 @@ public class DailyRewardGUI implements Listener {
     private final MCBDaily plugin;
     private final Player player;
     private final Inventory inventory;
+    private BukkitTask refreshTask;
     
     public DailyRewardGUI(MCBDaily plugin, Player player) {
         this.plugin = plugin;
         this.player = player;
-        this.inventory = Bukkit.createInventory(null, 27, "§6Daily Rewards");
+        
+        String title = ChatColor.translateAlternateColorCodes('&', 
+            plugin.getConfig().getString("gui.title", "&6Daily Rewards"));
+        this.inventory = Bukkit.createInventory(null, 27, title);
         
         // Register event listener
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         
         setupInventory();
+        startAutoRefresh();
     }
     
     private void setupInventory() {
@@ -61,13 +69,24 @@ public class DailyRewardGUI implements Listener {
     private ItemStack createClaimableItem() {
         ItemStack item = new ItemStack(Material.LIME_CONCRETE);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName("§a§lDaily Reward");
-        meta.setLore(Arrays.asList(
-            "§7Click to claim your daily reward!",
-            "",
-            "§eRewards:",
-            getRewardList()
-        ));
+        
+        // Get configurable display name
+        String displayName = plugin.getConfig().getString("gui.claimable.display-name", "&a&lDaily Reward");
+        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', displayName));
+        
+        // Get configurable lore
+        List<String> configLore = plugin.getConfig().getStringList("gui.claimable.lore");
+        List<String> lore = new ArrayList<>();
+        
+        for (String line : configLore) {
+            if (line.contains("%rewards%")) {
+                lore.add(getRewardList());
+            } else {
+                lore.add(ChatColor.translateAlternateColorCodes('&', line));
+            }
+        }
+        
+        meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
     }
@@ -75,18 +94,29 @@ public class DailyRewardGUI implements Listener {
     private ItemStack createCooldownItem() {
         ItemStack item = new ItemStack(Material.RED_CONCRETE);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName("§c§lDaily Reward");
+        
+        // Get configurable display name
+        String displayName = plugin.getConfig().getString("gui.cooldown.display-name", "&c&lDaily Reward");
+        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', displayName));
+        
+        // Get configurable lore
+        List<String> configLore = plugin.getConfig().getStringList("gui.cooldown.lore");
+        List<String> lore = new ArrayList<>();
         
         long timeLeft = plugin.getPlayerDataManager().getTimeUntilNextClaim(player.getUniqueId());
-        String timeString = TimeFormatter.formatTime(timeLeft);
+        String countdown = TimeFormatter.formatTime(timeLeft);
         
-        meta.setLore(Arrays.asList(
-            "§7You can claim again in:",
-            "§c" + timeString,
-            "",
-            "§eRewards:",
-            getRewardList()
-        ));
+        for (String line : configLore) {
+            if (line.contains("%countdown%")) {
+                lore.add(ChatColor.translateAlternateColorCodes('&', line.replace("%countdown%", countdown)));
+            } else if (line.contains("%rewards%")) {
+                lore.add(getRewardList());
+            } else {
+                lore.add(ChatColor.translateAlternateColorCodes('&', line));
+            }
+        }
+        
+        meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
     }
@@ -94,26 +124,62 @@ public class DailyRewardGUI implements Listener {
     private String getRewardList() {
         List<String> rewards = plugin.getConfig().getStringList("rewards");
         if (rewards.isEmpty()) {
-            return "§7No rewards configured";
+            return ChatColor.GRAY + "No rewards configured";
         }
         
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < Math.min(rewards.size(), 3); i++) {
-            sb.append("§7- ").append(rewards.get(i));
+            sb.append(ChatColor.GRAY).append("- ").append(rewards.get(i));
             if (i < Math.min(rewards.size(), 3) - 1) {
                 sb.append("\n");
             }
         }
         
         if (rewards.size() > 3) {
-            sb.append("\n§7... and ").append(rewards.size() - 3).append(" more!");
+            sb.append("\n").append(ChatColor.GRAY).append("... and ").append(rewards.size() - 3).append(" more!");
         }
         
         return sb.toString();
     }
     
+    private void startAutoRefresh() {
+        int refreshInterval = plugin.getConfig().getInt("gui.auto-refresh-seconds", 5);
+        
+        if (refreshInterval > 0) {
+            refreshTask = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
+                if (player.getOpenInventory().getTopInventory().equals(inventory)) {
+                    refreshInventory();
+                }
+            }, 20L * refreshInterval, 20L * refreshInterval);
+        }
+    }
+    
+    private void refreshInventory() {
+        // Only refresh the center item to avoid flickering
+        boolean canClaim = plugin.getPlayerDataManager().canClaim(player.getUniqueId());
+        
+        ItemStack newItem;
+        if (canClaim) {
+            newItem = createClaimableItem();
+        } else {
+            newItem = createCooldownItem();
+        }
+        
+        inventory.setItem(13, newItem);
+    }
+    
     public void open() {
         player.openInventory(inventory);
+    }
+    
+    public void close() {
+        if (refreshTask != null) {
+            refreshTask.cancel();
+        }
+        
+        // Unregister listener to prevent memory leaks
+        InventoryClickEvent.getHandlerList().unregister(this);
+        InventoryCloseEvent.getHandlerList().unregister(this);
     }
     
     @EventHandler
@@ -137,8 +203,15 @@ public class DailyRewardGUI implements Listener {
             if (plugin.getPlayerDataManager().canClaim(player.getUniqueId())) {
                 claimReward();
             } else {
-                player.sendMessage("§cYou cannot claim your daily reward yet!");
+                player.sendMessage(ChatColor.RED + "You cannot claim your daily reward yet!");
             }
+        }
+    }
+    
+    @EventHandler
+    public void onInventoryClose(InventoryCloseEvent event) {
+        if (event.getInventory().equals(inventory)) {
+            close();
         }
     }
     
@@ -155,7 +228,7 @@ public class DailyRewardGUI implements Listener {
         
         // Close inventory and send success message
         player.closeInventory();
-        player.sendMessage("§a§lDaily reward claimed successfully!");
+        player.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "Daily reward claimed successfully!");
         
         // Optional: Play sound effect
         player.playSound(player.getLocation(), org.bukkit.Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);

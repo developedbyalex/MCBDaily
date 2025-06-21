@@ -47,6 +47,33 @@ The plugin generates a `config.yml` file with the following structure:
 # Cooldown time in hours (default: 24 hours)
 cooldown-hours: 24
 
+# GUI Configuration
+gui:
+  # Title of the GUI
+  title: "&6Daily Rewards"
+  
+  # Auto-refresh interval in seconds (0 to disable)
+  auto-refresh-seconds: 5
+  
+  # Claimable item configuration (lime concrete)
+  claimable:
+    display-name: "&a&lDaily Reward"
+    lore:
+      - "&7Click to claim your daily reward!"
+      - ""
+      - "&eRewards:"
+      - "%rewards%"
+  
+  # Cooldown item configuration (red concrete)  
+  cooldown:
+    display-name: "&c&lDaily Reward"
+    lore:
+      - "&7You can claim again in:"
+      - "&c%countdown%"
+      - ""
+      - "&eRewards:"
+      - "%rewards%"
+
 # List of commands to execute when a player claims their daily reward
 # Use %player% as a placeholder for the player's name
 rewards:
@@ -59,6 +86,19 @@ rewards:
 # Debug mode (logs additional information)
 debug: false
 ```
+
+### Configuration Placeholders
+
+You can use these placeholders in your GUI lore:
+- `%countdown%` - Shows the time remaining until next claim
+- `%rewards%` - Shows a preview of the configured rewards
+- `%player%` - Player's name (in reward commands)
+
+### GUI Features
+
+- **Auto-refresh**: The countdown updates automatically every 5 seconds (configurable)
+- **Custom lore**: Fully customizable item names and descriptions
+- **Color codes**: Use `&` color codes in all text fields
 
 ## PlaceholderAPI Support
 
